@@ -1,74 +1,43 @@
 function Leer() {
-    const peli = document.getElementById("input").value;
-    //obtain an apikey on this web
-    //http://www.omdbapi.com/apikey.aspx
-    const key='1ded3ad1';
-    const api_url=`http://www.omdbapi.com/?s=${peli}&apikey=${key}`
-    buscar3(api_url);
-}
+    const music = document.getElementById('input').value;
+    Spotify(music);
+    
+   
+  }
+  
+  const Spotify=async(music)=>{
 
-function buscar1(api_url){
+    const url =  `https://spotify23.p.rapidapi.com/search/?q=${music}&type=albums&offset=0&limit=10&numberOfTopResults=10`;
+    const options = {
+        method: 'GET',
+        headers: {
+                'X-RapidAPI-Key': '78eb27c39emshbf4bdd363bed885p151c2bjsn4499ab3463e3',
+                'X-RapidAPI-Host': 'spotify23.p.rapidapi.com'
+        }
+    };
+    
+    try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        const resultado = await result.albums.items;
+        //console.log(resultado);
 
-    fetch(api_url)
-      .then(data => {
-        return data.json()
-      }).then(resultado=>{
-            console.log(resultado);
-
-            const {Search=[]} = resultado;
-            
-            console.log(Search);
-            document.getElementById("lista").innerHTML='';
-
-            Search.map((p)=>{
-                document.getElementById("lista").innerHTML+=`<div style="margin-top:10px;">
-                         <img width='100%' src=${p.Poster} alt="No hay poster"></img>
+        resultado.map((p)=>{
+                      
+            document.getElementById("lista").innerHTML+=`<div style="margin-top:10px;">
+            <img width='100%' src=${p.data.coverArt.sources[0].url} alt="No hay poster"></img>
             </div>`;
-            })
-      });
+
+       })
 
 
-}
-
-const buscar2=async(api_url)=>{
-
-    const data= await fetch(api_url);
-    const respuesta= await data.json();
-    const Search = await respuesta.Search;
-
-    console.log(Search);
-
-    if(Search!=null)
-    {   
-        document.getElementById("lista").innerHTML='';
-        Search.map((p)=>{
-                document.getElementById("lista").innerHTML+=`<div style="margin-top:10px;">
-                    <img width='100%' src=${p.Poster} alt="No hay poster"></img></div>`;
-        })
-
+    } catch (error) {
+        console.error(error);
     }
-
-}    
-
-     
-const buscar3=async(api_url)=>{
-
-    const respuesta= await axios(api_url);
-    const Search = await respuesta.data.Search;
-    console.log(respuesta.data);
-    
-    console.log(Search);
-
-    
-    if(Search!=null)
-    {
-        document.getElementById("lista").innerHTML='';
-        
-        Search.map((p)=>{
-                document.getElementById("lista").innerHTML+=`<div style="margin-top:10px;">
-                    <img width='100%' src=${p.Poster} alt="No hay poster"></img></div>`;
-        })
-
-    }
-
-}    
+  };
+ 
+  
+  
+  
+  
+ 
